@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="Assignment4">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js" type="application/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+    <script>
+    </script>
+    <style>
+        #map-canvas {
+            width: 1400px;
+            height: 1400px;
+        }
+        .weatherDiv {
+            background: #f2f2f2;
+            height: 150px;
+            width: 1400px;
+            border: 1px dashed #ccc;
+            padding: 1em;
+        }
+    </style>
+</head>
+<body style="background-color:lightskyblue">
+<div ng-controller="mapsTemp">
+    <div >
+        <input type="text"  ng-model="startlocation"  placeholder="Source" id="startlocation" />
+        <input type="text"  ng-model="endlocation" id="endlocation" placeholder="Destination"  />
+        <button id="btn" ng-click="getWeather_Dest();getWeather_Source();findRoute()" >
+            Find Route..!!
+        </button>
+        <button id="lgbtn" ng-click="logOut()" style="margin-left: 60%">
+            LogOut
+        </button>
+        <br/></br>
+    </div>
+    <div id="map-canvas" style="height: 400px;"></div>
+    <div class="weatherDiv">
+        <p id="source_weather"></p>
+        <p id="des_weather"></p>
+
+    </div>
+</div>
+</body>
+</html>
+<script>
+    angular.module('Assignment4', [])
+            .controller('mapsTemp', function ($scope,$http) {
+                var map;
+                var mapOptions;
+                var directionsDisplay = new google.maps.DirectionsRenderer({
+                    draggable: true
+                });
+                var directionsService = new google.maps.DirectionsService();
+                $scope.initialize = function () {
+                    var pos = new google.maps.LatLng(0, 0);
+                    var mapOptions = {
+                        zoom: 3,
+                        center: pos
+                    };
+                    map = new google.maps.Map(document.getElementById('map-canvas'),
+                            mapOptions);
+                };
+                $scope.logOut=function()
+                {
+                    window.location.href='LogIn.html';
+                }
+                $scope.findRoute = function () {
+                    var end = document.getElementById('endlocation').value;
+                    var start = document.getElementById('startlocation').value;
+                    // alert("Start Location"+start+"EndLocation"+end);
+                    var request = {
+                        origin: start,
+                        destination: end,
+                        travelMode: google.maps.TravelMode.DRIVING
+                    };
+                    var address = end;
+                    geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({
+                        'address': address
+                    }, function(results, status) {
+                        var lat=results[0].geometry.location.lat();
+                        var lng=results[0].geometry.location.lng();
+                        console.log(lat);
+                    });
+                    directionsService.route(request, function (response, status) {
+                        if (status == google.maps.DirectionsStatus.OK) {
+                            directionsDisplay.setMap(map);
+                            directionsDisplay.setDirections(response);
+                            console.log(status);
+                        }
+                    });
+};
+                $scope.getWeather_Source = function() {
+                    var source=document.getElementById('startlocation').value;
+                    console.log(source.toString());
+                    $http.get('http://api.openweathermap.org/data/2.5/weather?q='+source+'&appid=a2c1cdbc7a2e370118610010dfafbaac').success(function(data) {
+                        temp = data.main.temp;
+                        var fh=$scope.kelvintoFahrenheit(temp.toString()).toFixed(2);
+                       // var icon_url="http://openweathermap.org/img/w/"+ic+".png";
+                        var desc = data.weather[0].description;
+                        document.getElementById('source_weather').innerHTML="Currently " + fh + " &deg; F and " + desc;
+                      })
+                }
+                $scope.getWeather_Dest = function() {
+                    var destination=document.getElementById('endlocation').value;
+                    $http.get('http://api.openweathermap.org/data/2.5/weather?q='+destination+'&appid=a2c1cdbc7a2e370118610010dfafbaac').success(function(data) {
+                        console.log(data);
+                        temp = data.main.temp;
+                        var fh=$scope.kelvintoFahrenheit(temp.toString()).toFixed(2);
+                        var desc = data.weather[0].description;
+                        console.log("destination weather");
+                        document.getElementById('des_weather').innerHTML="Currently " + fh + " &deg; F and " + desc;
+                    })
+                }
+
+                $scope.kelvintoFahrenheit=function(kelvin){
+                    return (kelvin - 273.15) * 1.8 + 32;
+                }
+                google.maps.event.addDomListener(window, 'load', $scope.initialize);
+            });
+</script>

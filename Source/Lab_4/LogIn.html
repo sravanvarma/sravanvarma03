@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+ >
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Log In</title>
+    <style>
+        h1
+        {
+            color: antiquewhite;
+            font-family: "Comic Sans MS";
+                    }
+        .butt {
+            margin: 10px;
+
+            font-family: "Comic Sans MS";
+            display: inline-block;
+            text-align: center;
+            color: black;
+            border: 1px solid #9c9c9c; /* Fallback style */
+            border: 1px solid rgba(0, 0, 0, 0.3);
+
+        }
+    </style>
+    <script>
+
+        function logInAct()
+        {
+            if(document.getElementById("username").value.length>0 && document.getElementById("password").value.length>0) {
+                if (typeof(Storage) !== "undefined") {
+                    var input1 = localStorage.getItem("UserName");
+                    var input2 = localStorage.getItem("Password");
+                }
+
+                if (input1 == document.getElementById("username").value && input2 == document.getElementById("password").value) {
+                    window.location.href = 'Home.html';
+                }
+                else {
+                    alert("Wrong Credentials");
+                }
+            }
+            else
+            {
+                alert("Give all details");
+            }
+
+        }
+        function registerPage()
+        {
+            window.location.href='RegisterPage.html';
+        }
+
+    </script>
+
+</head>
+<body background="1.jpg">
+
+<div align="center"    style=" padding-top: 10px; ">
+
+    <h1 align="center" style="padding-top: 150px">Log In </h1>
+<input type="text" id="username"
+       placeholder="Username" align="vertical"/> <br/>
+    <br/>
+<input type="password" id="password" placeholder="Password" typeof="password"/> <br/>
+    <br/>
+<div >
+<input type="button"   class="butt" id="logIn" value="LogIn" align="center" onclick="logInAct()"/>
+    <input type="button"   class="butt"   id="register" value="Register" align="center" onclick="registerPage()"/>
+</div>
+    <br/>
+
+</div>
+</body>
+</html>

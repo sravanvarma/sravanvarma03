@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Page</title>
+    <style>
+        .button {
+            margin: 10px;
+
+            font-family: "Comic Sans MS";
+            display: inline-block;
+            text-align: center;
+            color: black;
+            border: 1px solid #9c9c9c; /* Fallback style */
+            border: 1px solid rgba(0, 0, 0, 0.3);
+
+        }
+        th
+        {
+            color: antiquewhite;
+            font-family: "Comic Sans MS";
+            text-align: right;
+        }
+    </style>
+    <script>
+        function logInAct()
+        {
+            window.location.href='LogIn.html';
+        }
+
+        function register()
+        {
+            if ( document.getElementById("fullName").value.length>0 && document.getElementById("age").value.length>0 &&
+                    document.getElementById("mailID").value.length>0 && document.getElementById("username").value.length>0 &&
+                    document.getElementById("pwd").value.length>0 && document.getElementById("cPwd").value.length>0 &&
+                    ( document.getElementById("pwd").value ==  document.getElementById("cPwd").value)) {
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem("FullName", document.getElementById("fullName").value);
+                    localStorage.setItem("Age1", document.getElementById("age").value);
+                    localStorage.setItem("Mail", document.getElementById("mailID").value);
+                    localStorage.setItem("UserName", document.getElementById("username").value);
+                    localStorage.setItem("Password", document.getElementById("pwd").value);
+                }
+
+                alert("Directing to Log-In page");
+                logInAct();
+
+            }
+            else
+            {
+                alert("Give all details..!!");
+            }
+        }
+
+    </script>
+
+</head>
+<body background="1.jpg">
+<h1 align="center" style="padding-top: 150px;color:antiquewhite;font-family:'Comic Sans MS';" >Registration Page </h1>
+<div align="center" >
+    <table align="center">
+        <tr>
+  <th>  Full name: </th>
+            <td><input type="text" id="fullName" placeholder="FullName" /></td>         </tr>
+        <tr>
+<th>  Age: </th> <td> <input type="text" id="age" placeholder="Age" /></td>         </tr>
+        <tr>
+            <th>
+  E-Mail: </th> <td><input type="text" id="mailID" placeholder="E-Mail" /> </td>
+        </tr>
+        <tr>
+            <th>
+   Username:  </th><td> <input type="text" id="username" placeholder="Username" /></td>
+        </tr><th>
+  Password:  </th><td> <input type="password" id="pwd" placeholder="Password" /></td>
+<tr>
+    <th>
+   Confrirm Password: </th> <td>  <input type="password" id="cPwd" placeholder="Re-Enter Password"  /> </td>
+</tr>
+    </table>
+    <br/>
+    <input type="button" class="button" id="register" value="Register" align="center" onclick="register()" />
+
+</div>
+
+
+</body>
+</html>
