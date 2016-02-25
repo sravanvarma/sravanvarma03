@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="Mashup">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js" type="application/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+    <style>
+        #map-canvas {
+            width: 1400px;
+            height: 1400px;
+        }
+        .weatherDiv {
+            background: #f2f2f2;
+            height: 150px;
+            width: 1400px;
+            border: 1px dashed #ccc;
+            padding: 1em;
+        }
+    </style>
+</head>
+
+<body style="background-color:lightskyblue">
+<div ng-controller="mapsTemp">
+    <p id="home" class="welcome"></p>
+    <div >
+        <button id="lgbtn" onclick="logOut()" style="margin-left: 60%">
+            LogOut
+        </button>
+        <br/></br>
+
+        <button id="lgnxt" onclick="move()" style="margin-left: 60%">
+            Find near by places
+        </button>
+    </div>
+    <div id="map-canvas" style="height: 400px;"></div>
+    <div class="weatherDiv">
+        <p id="source_weather"></p>
+        <p id="des_weather"></p>
+
+    </div>
+</div>
+</body>
+</html>
+<script>
+    window.onload = function() {
+        document.getElementById("home").innerHTML="Welcome "+localStorage.getItem("Name");
+        var startPos;
+        var geoOptions = {
+            enableHighAccuracy: true
+        }
+
+
+        var geoSuccess = function(position) {
+            startPos = position;
+            console.log(startPos.coords.latitude);
+            var current= new google.maps.LatLng(startPos.coords.latitude, startPos.coords.longitude);
+            localStorage.setItem("lat",startPos.coords.latitude);
+            localStorage.setItem("lon",startPos.coords.longitude);
+            var mapOptions = {
+                zoom: 8,
+                center: current
+            };
+            var map = new google.maps.Map(document.getElementById('map-canvas'),
+                    mapOptions);
+            var myLatLng = {lat: startPos.coords.latitude, lng: startPos.coords.longitude};
+
+            localStorage.setItem("loc",myLatLng);
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: 'Hello World!'
+            });
+
+            var geocoder;
+            geocoder = new google.maps.Geocoder();
+            var latlng1 = new google.maps.LatLng(startPos.coords.latitude, startPos.coords.longitude);
+            geocoder.geocode(
+                    {'latLng': latlng1},
+                    function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (results[0]) {
+                                var add= results[0].formatted_address ;
+                                var  value=add.split(",");
+
+                                count=value.length;
+                                country=value[count-1];
+                                state=value[count-2];
+                                city=value[count-3];
+                                //alert("city name is: " + city);
+                            }
+                            else  {
+                                alert("address not found");
+                            }
+                        }
+                        else {
+                            alert("Geocoder failed due to: " + status);
+                        }
+                    }
+            );
+
+        };
+        var geoError = function(error) {
+            console.log('Error occurred. Error code: ' + error.code);
+        };
+
+        navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+    };
+    function logOut()
+    {
+        window.location.href = 'Login.html';
+    }
+    function move()
+    {
+        window.location.href = 'sample.html';
+    }
+
+</script>
