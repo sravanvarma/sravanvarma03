@@ -1,0 +1,33 @@
+
+    <ion-view view-title="Home Page" ng-app="first" ng-controller="details">
+        <ion-nav-bar class="bar-stable"></ion-nav-bar>
+ <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-camera" ng-click="camClick()"></button>
+        </ion-nav-buttons>
+        <ion-content>
+   
+
+    <div class="list card" ng-if="IMG">
+          <div class="item item-image">
+            <img ng-src="{{IMG}}" width="100%">
+          </div>
+        </div>
+    <p>fjgfjhjgfjhg2</p>
+    <p>{{desc}}</p>
+    <p>
+    {{city1}}
+    {{des}}
+    {{temperature}}
+    {{temp_min}}
+    {{temp_max}}
+    {{hum}}
+{{desc}}
+{{placeid}}  
+    {{cityName}}
+    {{lat}}
+    {{lng}}
+    {{x}}    
+    </p>
+    <p>{{des}}</p>
+</ion-content>
+</ion-view>
